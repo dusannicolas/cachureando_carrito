@@ -3,6 +3,7 @@ const baseDeDatos = [
     {
         id: 1,
         nombre: 'Radio',
+        codigo: '1001',
         precio: 18000,
         imagen: 'images/radio.jpg',
         descripcion: 'Radio en buen estado. Funciona a pila y a electricidad.'
@@ -10,6 +11,7 @@ const baseDeDatos = [
     {
         id: 2,
         nombre: 'Selz',
+        codigo: '1002',
         precio: 500,
         imagen: 'images/selz.jpg',
         descripcion: 'Exquisitas galletas saladas.'
@@ -17,6 +19,7 @@ const baseDeDatos = [
     {
         id: 3,
         nombre: 'Trolls',
+        codigo: '1003',
         precio: 12500,
         imagen: 'images/trolls.jpg',
         descripcion: 'Juguete vintage nuevo. Incluye accesorios.'
@@ -24,6 +27,7 @@ const baseDeDatos = [
     {
         id: 4,
         nombre: 'Asesoría Judicial',
+        codigo: '1004',
         precio: 50000,
         imagen: 'images/1.jpg',
         descripcion: 'Contamos con los mejores abogados de la región.'
@@ -31,6 +35,7 @@ const baseDeDatos = [
     {
         id: 5,
         nombre: 'Vinilo',
+        codigo: '1005',
         precio: 5000,
         imagen: 'images/vinilo.png',
         descripcion: 'Vinilo antiguo usado. Buen estado.'
@@ -38,6 +43,7 @@ const baseDeDatos = [
     {
         id: 6,
         nombre: 'Computador Mac',
+        codigo: '1006',
         precio: 500000,
         imagen: 'images/2.jpg',
         descripcion: 'Computador Mac nuevo.'
@@ -45,6 +51,7 @@ const baseDeDatos = [
     {
         id: 7,
         nombre: 'Arriendo oficina',
+        codigo: '1007',
         precio: 250000,
         imagen: 'images/3.jpg',
         descripcion: 'Oficina para arriendo en pleno centro de la ciudad.'
@@ -52,6 +59,7 @@ const baseDeDatos = [
     {
         id: 8,
         nombre: 'Televisor',
+        codigo: '1008',
         precio: 200000,
         imagen: 'images/tv.jpg',
         descripcion: 'Smart tv LG.'
@@ -59,6 +67,7 @@ const baseDeDatos = [
     {
         id: 9,
         nombre: 'Celular',
+        codigo: '1009',
         precio: 100000,
         imagen: 'images/cel.jpg',
         descripcion: 'Celular nuevo motorola.'
@@ -66,6 +75,7 @@ const baseDeDatos = [
     {
         id: 10,
         nombre: 'Torta manjar',
+        codigo: '1010',
         precio: 20000,
         imagen: 'images/torta.jpg',
         descripcion: 'Exquisita torta de manjar.'
@@ -79,6 +89,7 @@ const DOMitems = document.querySelector('#items');
 const DOMcarrito = document.querySelector('#carrito');
 const DOMtotal = document.querySelector('#total');
 const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+const DOMabrirPagar = document.querySelector('#abrirPagar');
 
 // Funciones
 
@@ -97,6 +108,10 @@ function renderizarProductos() {
         const miNodoTitle = document.createElement('h5');
         miNodoTitle.classList.add('card-title');
         miNodoTitle.textContent = info.nombre;
+         // Codigo
+         const miNodoCodigo = document.createElement('p');
+         miNodoCodigo.classList.add('card-text');
+         miNodoCodigo.textContent = `CÓD: ${info.codigo}`;
         // Imagen
         const miNodoImagen = document.createElement('img');
         miNodoImagen.classList.add('img-fluid');
@@ -118,6 +133,7 @@ function renderizarProductos() {
         // Insertamos
         miNodoCardBody.appendChild(miNodoImagen);
         miNodoCardBody.appendChild(miNodoTitle);
+        miNodoCardBody.appendChild(miNodoCodigo);
         miNodoCardBody.appendChild(miNodoDescripcion);
         miNodoCardBody.appendChild(miNodoPrecio);
         miNodoCardBody.appendChild(miNodoBoton);
@@ -221,3 +237,21 @@ DOMbotonVaciar.addEventListener('click', vaciarCarrito);
 // Inicio
 renderizarProductos();
 renderizarCarrito();
+
+///////// DUSAN //////
+
+if(total < 100000){
+    
+}else{
+    
+}
+
+
+function modalPagar() {
+    // Limpiamos los productos guardados
+    carrito = [];
+    // Renderizamos los cambios
+    renderizarCarrito();
+}
+
+DOMabrirPagar.addEventListener('click', modalPagar);
