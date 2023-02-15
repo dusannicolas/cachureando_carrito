@@ -36,7 +36,7 @@
             <div class="col-8">
               <div class="">
                 <!-- Elementos generados a partir del JSON -->
-                <main id="items" class="d-flex overflow-auto"></main>
+                <main id="items" class="d-flex overflow-auto row"></main>
               </div>
             </div>  <!-- col8 -->
             <div class="col-4 border border-3 border-primary">
@@ -47,7 +47,11 @@
                   <ul id="carrito" class="list-group"></ul>
                   <hr>
                   <!-- Precio total -->
-                  <p class="text-right">Total: $<span id="total"></span></p>
+                  <p class="text-right">Total neto: $<span id="total"></span></p>
+                  <p class="text-right">IVA: $<span id="iva"></span></p>
+                  <p class="text-right fw-bold">Total a pagar: $<span id="tbruto"></span></p>
+                  <p class="text-right">Envío: <span id="envio"></span></p>
+
                   <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
 
                  

@@ -88,6 +88,9 @@ const divisa = '$';
 const DOMitems = document.querySelector('#items');
 const DOMcarrito = document.querySelector('#carrito');
 const DOMtotal = document.querySelector('#total');
+const DOMiva = document.querySelector('#iva');
+const DOMbruto = document.querySelector('#tbruto');
+const DOMenvio = document.querySelector('#envio');
 const DOMbotonVaciar = document.querySelector('#boton-vaciar');
 const DOMabrirPagar = document.querySelector('#abrirPagar');
 
@@ -190,7 +193,23 @@ function renderizarCarrito() {
     });
     // Renderizamos el precio total en el HTML
     DOMtotal.textContent = calcularTotal();
+
+    DOMiva.textContent = calcularTotal()*0.19
+    DOMbruto.textContent = calcularTotal()*1.19
+
+    const totalconiva = calcularTotal()*1.19;
+
+    /* Calcula si corresponde cargo envío */
+    if (totalconiva < 100000) {
+        DOMenvio.textContent = '$ ' + parseInt(totalconiva * 0.05);
+    }else{
+        DOMenvio.textContent = `¡Conseguiste envío gratuito!`
+    };
 }
+
+
+
+
 
 /**
  * Evento para borrar un elemento del carrito
@@ -222,7 +241,7 @@ function calcularTotal() {
 }
 
 /**
- * Varia el carrito y vuelve a dibujarlo
+ * Vacia el carrito y vuelve a dibujarlo
  */
 function vaciarCarrito() {
     // Limpiamos los productos guardados
@@ -240,18 +259,35 @@ renderizarCarrito();
 
 ///////// DUSAN //////
 
-if(total < 100000){
-    
-}else{
-    
-}
-
-
-function modalPagar() {
+/* function modalPagar() {
     // Limpiamos los productos guardados
     carrito = [];
     // Renderizamos los cambios
     renderizarCarrito();
-}
+} */
 
-DOMabrirPagar.addEventListener('click', modalPagar);
+//let clondiv = DOMcarrito.clone();
+//const clon = document.querySelector('#carrito').cloneNode(true);
+
+function boleta() {
+    var clon = document.getElementById("carrito");
+    var nuevo=clon.cloneNode(true);
+    nuevo.style.id='list-group' +orden;
+    orden++;
+    id=document.getElementById("nuevoclon");
+    id.appendChild(nuevo);
+}
+DOMabrirPagar.addEventListener('click', boleta);
+
+/*
+var orden=1;
+function clonarNodos()
+{
+  var id=document.getElementById("enlaces");
+  var nuevos=id.cloneNode(true);
+  nuevos.style.id='enlaces'+orden;
+  orden++;
+  id=document.getElementById("enlacesnuevos");
+  id.appendChild(nuevos);
+}
+*/
