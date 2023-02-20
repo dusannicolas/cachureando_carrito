@@ -179,13 +179,14 @@ function renderizarCarrito() {
         }, 0);
         // Creamos el nodo del item del carrito
         const miNodo = document.createElement('li');
-        miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
-        miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${divisa}${miItem[0].precio} c/u`;
+        miNodo.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'lh-sm', 'mx-2');
+        const totlinea = miItem[0].precio * numeroUnidadesItem;
+        miNodo.innerHTML = `<div class="ms-2 me-auto" style="font-size:0.8em;"><div class="fw-bold">(COD:${miItem[0].codigo}) - ${miItem[0].nombre}</div>${divisa}${miItem[0].precio} c/u X ${numeroUnidadesItem} = ${divisa} ${totlinea}</div>`;
         // Boton de borrar
-        const miBoton = document.createElement('button');
-        miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+        const miBoton = document.createElement('span');
+        miBoton.classList.add('badge', 'bg-primary', 'rounded-pill');
         miBoton.textContent = 'X';
-        miBoton.style.marginLeft = '1rem';
+        miBoton.style.marginRight = '0rem';
         miBoton.dataset.item = item;
         miBoton.addEventListener('click', borrarItemCarrito);
         // Mezclamos nodos
@@ -205,7 +206,7 @@ function renderizarCarrito() {
     }else{
         DOMenvio.textContent = `0 (¡Conseguiste envío gratuito!)`
     };
-    // Clacula total a pagar
+    // Calcula total a pagar
     DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
 }
 
@@ -257,12 +258,18 @@ renderizarCarrito();
 
 // BOLETA
 
-//Función que clona div DOMcarrito
+//Función que clona div DOMcarrito y Resumen
 function boleta() {
+    document.querySelector('#comprados').textContent = '';
+    document.querySelector('#resumen').textContent = '';
     var clon = DOMcarrito;
     var nuevo = clon.cloneNode(true);
     id = document.getElementById("comprados");
     id.appendChild(nuevo); 
+    var clon2 = document.querySelector('#resTotal');
+    var nuevo2 = clon2.cloneNode(true);
+    id2 = document.getElementById("resumen");
+    id2.appendChild(nuevo2); 
 }
 
 DOMabrirPagar.addEventListener('click', boleta);
