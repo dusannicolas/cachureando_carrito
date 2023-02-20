@@ -49,9 +49,9 @@
                   <!-- Precio total -->
                   <p id="pneto" class="text-right">Total neto: $<span id="total"></span></p>
                   <p id="piva" class="text-right">IVA: $<span id="iva"></span></p>
-                  <p id="pbruto" class="text-right fw-bold">Total bruto: $<span id="bruto"></span></p>
-                  <p id="penvio" class="text-right fw-italic">Envío: $<span id="envio"></span></p>
-                  <p id="ptotal" class="text-right fw-italic-bold"> Total a pagar: $<span id="total"></span></p>
+                  <p id="pbruto" class="text-right">Total bruto: $<span id="bruto"></span></p>
+                  <p id="penvio" class="text-right">Envío: $<span id="envio"></span></p>
+                  <p id="ptotal" class="text-right fw-bold"> Total a pagar: $<span id="apagar"></span></p>
 
                   <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
 
@@ -74,10 +74,42 @@
       </div>
 
       <!-- Modal body -->
+      <div class="container">
+        <p>Ingresa tus datos para confirmar la compra</p>
+        <div class="mb-4 row">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa tu primer nombre y dos apellidos</small>
+          </div>
+        <div class="mb-5 row">
+          <label for="calle" class="form-label">Dirección</label>
+          <input type="text" name="calle" id="calle" class="form-control" placeholder="Avenida Bulnes 27" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa el nombre de tu calle y el número de casa y departamento si corresponde</small>
+        </div>
+        <div class="mb-2 row col-4">
+          <label for="comuna" class="form-label">Comuna</label>
+          <input type="text" name="comuna" id="comuna" class="form-control" placeholder="Punta Arenas" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa tu comuna</small>
+        </div>
+        <div class="mb-3 col-6">
+          <label for="region" class="form-label">Región</label>
+          <input type="text" name="region" id="region" class="form-control" placeholder="Magallanes" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa tu región</small>
+        </div>
+        <div class="mb-3">
+          <label for="recibe" class="form-label">Nombre de quien recibe</label>
+          <input type="text" name="recibe" id="recibe" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa el nombre de quien recibirá la encomienda</small>
+        </div>
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo de quién recibe</label>
+          <input type="text" name="correo" id="correo" class="form-control" placeholder="correo@ejemplo.cl" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Ingresa el correo de la persona que recibirá la encomienda</small>
+        </div>
+      </div>
       <div class="modal-body">
         <div id="comprados"></div>
       </div>
-
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

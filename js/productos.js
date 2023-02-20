@@ -91,6 +91,7 @@ const DOMtotal = document.querySelector('#total');
 const DOMiva = document.querySelector('#iva');
 const DOMbruto = document.querySelector('#bruto');
 const DOMenvio = document.querySelector('#envio');
+const DOMapagar = document.querySelector('#apagar')
 const DOMbotonVaciar = document.querySelector('#boton-vaciar');
 const DOMabrirPagar = document.querySelector('#abrirPagar');
 
@@ -200,10 +201,12 @@ function renderizarCarrito() {
     DOMbruto.textContent = totalconiva
     /* Calcula si corresponde cargo envío */
     if (totalconiva < 100000) {
-        DOMenvio.textContent = '$ ' + parseInt(totalconiva * 0.05);
+        DOMenvio.textContent = parseInt(totalconiva * 0.05);
     }else{
-        DOMenvio.textContent = `¡Conseguiste envío gratuito!`
+        DOMenvio.textContent = `0 (¡Conseguiste envío gratuito!)`
     };
+    // Clacula total a pagar
+    DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
 }
 
 /**
@@ -259,24 +262,7 @@ function boleta() {
     var clon = DOMcarrito;
     var nuevo = clon.cloneNode(true);
     id = document.getElementById("comprados");
-    id.appendChild(nuevo);
-/*    id.appendChild(DOMtotal);
-    id.appendChild(DOMbruto);
-    id.appendChild(DOMiva);
-    id.appendChild(DOMenvio);*/
- //   var 
+    id.appendChild(nuevo); 
 }
-DOMabrirPagar.addEventListener('click', boleta);
 
-/*
-var orden=1;
-function clonarNodos()
-{
-  var id=document.getElementById("enlaces");
-  var nuevos=id.cloneNode(true);
-  nuevos.style.id='enlaces'+orden;
-  orden++;
-  id=document.getElementById("enlacesnuevos");
-  id.appendChild(nuevos);
-}
-*/
+DOMabrirPagar.addEventListener('click', boleta);
