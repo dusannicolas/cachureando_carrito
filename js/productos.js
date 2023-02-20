@@ -89,7 +89,7 @@ const DOMitems = document.querySelector('#items');
 const DOMcarrito = document.querySelector('#carrito');
 const DOMtotal = document.querySelector('#total');
 const DOMiva = document.querySelector('#iva');
-const DOMbruto = document.querySelector('#tbruto');
+const DOMbruto = document.querySelector('#bruto');
 const DOMenvio = document.querySelector('#envio');
 const DOMbotonVaciar = document.querySelector('#boton-vaciar');
 const DOMabrirPagar = document.querySelector('#abrirPagar');
@@ -191,14 +191,13 @@ function renderizarCarrito() {
         miNodo.appendChild(miBoton);
         DOMcarrito.appendChild(miNodo);
     });
-    // Renderizamos el precio total en el HTML
+    // Renderizamos el precio neto en el HTML
     DOMtotal.textContent = calcularTotal();
-
+    // Calculamos el IVA
     DOMiva.textContent = calcularTotal()*0.19
-    DOMbruto.textContent = calcularTotal()*1.19
-
+    // Calculamos el bruto
     const totalconiva = calcularTotal()*1.19;
-
+    DOMbruto.textContent = totalconiva
     /* Calcula si corresponde cargo envío */
     if (totalconiva < 100000) {
         DOMenvio.textContent = '$ ' + parseInt(totalconiva * 0.05);
@@ -206,10 +205,6 @@ function renderizarCarrito() {
         DOMenvio.textContent = `¡Conseguiste envío gratuito!`
     };
 }
-
-
-
-
 
 /**
  * Evento para borrar un elemento del carrito
@@ -257,25 +252,19 @@ DOMbotonVaciar.addEventListener('click', vaciarCarrito);
 renderizarProductos();
 renderizarCarrito();
 
-///////// DUSAN //////
+// BOLETA
 
-/* function modalPagar() {
-    // Limpiamos los productos guardados
-    carrito = [];
-    // Renderizamos los cambios
-    renderizarCarrito();
-} */
-
-//let clondiv = DOMcarrito.clone();
-//const clon = document.querySelector('#carrito').cloneNode(true);
-
+//Función que clona div DOMcarrito
 function boleta() {
-    var clon = document.getElementById("carrito");
-    var nuevo=clon.cloneNode(true);
-    nuevo.style.id='list-group' +orden;
-    orden++;
-    id=document.getElementById("nuevoclon");
+    var clon = DOMcarrito;
+    var nuevo = clon.cloneNode(true);
+    id = document.getElementById("comprados");
     id.appendChild(nuevo);
+/*    id.appendChild(DOMtotal);
+    id.appendChild(DOMbruto);
+    id.appendChild(DOMiva);
+    id.appendChild(DOMenvio);*/
+ //   var 
 }
 DOMabrirPagar.addEventListener('click', boleta);
 
