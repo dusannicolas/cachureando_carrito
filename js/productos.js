@@ -212,7 +212,7 @@ function renderizarCarrito() {
     // Calculamos el bruto
     const totalconiva = calcularTotal()*1.19;
     DOMbruto.textContent = totalconiva
-    /* Calcula si corresponde cargo envío */
+    // Calcula si corresponde cargo envío
     if (totalconiva < 100000) {
         DOMenvio.textContent = parseInt(totalconiva * 0.05);
     }else{
@@ -300,6 +300,7 @@ DOMabrirPagar.addEventListener('click', boleta);
 // ENVÍO CORREO
 
 function sendMail() {
+    // Objeto a enviar: la propiedad es la que se llama desde emailJS
     var params = {
       nombre: document.getElementById("nombre").value,
       direccion: document.getElementById("calle").value,
@@ -307,14 +308,15 @@ function sendMail() {
       region: document.getElementById("region").value,
       recibe: document.getElementById("recibe").value,
       correo: document.getElementById("correo").value,
-      compra: document.getElementById("comprados").innerHTML,
-      resumen: document.getElementById("resumen").innerHTML
+      compra: '<html>'+document.getElementById("comprados").innerHTML+'</html>',
+      resumen: '<html>'+document.getElementById("resumen").innerHTML+'</html>'
     };
   
     const serviceID = "service_ghnmo4w" //"service_zv8n9o8";
     const templateID = "template_mggbvqq" //"template_klc0rtf";
   
       emailjs.send(serviceID, templateID, params)
+    // Limpia el formulario luego del envío. No se limpia el cntenido del carrito
       .then(res=>{
         document.getElementById("nombre").value = '';
         document.getElementById("calle").value = '';
@@ -322,10 +324,10 @@ function sendMail() {
         document.getElementById("region").value = '';
         document.getElementById("recibe").value = '';
         document.getElementById("correo").value = '';
-          console.log(res);
-          alert("¡Tu mensaje ha sido enviado exitosamente!")
+          console.log(res); // Registro de respuesta API en consola
+          alert("¡Tu mensaje ha sido enviado exitosamente!") // Alerta de envío exitoso
   
       })
-      .catch(err=>console.log(err));
+      .catch(err=>console.log(err)); // Registro de errores en consola
   
   }
