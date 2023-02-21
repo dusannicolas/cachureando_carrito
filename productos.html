@@ -65,12 +65,12 @@
 
 <!-- The Modal -->
 <div class="modal" id="myModal">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Recibo de compra</h4>
+        <h4 class="modal-title">Ingresa tus datos para confirmar la compra</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
@@ -80,58 +80,56 @@
           <h4>Productos</h4>
         </div>
       <!-- DIV elementos comprados -->
+      <div class="row">
+        <div class="col-6">
       <div id="comprados"></div>
-      <!-- DIV Resumen compra -->
-      <div>
-        <div>
-          <h4>Resumen de tu compra</h4>
-        </div>
-        <div id="resumen"></div>
-      </div>
+      <h4>Resumen de tu compra</h4>
+      <div id="resumen"></div>
+    </div> <!-- col6 -->
       <!-- DIV formulario datos -->
-      <div class="container">
-        <p>Ingresa tus datos para confirmar la compra</p>
-        <div class="mb-4 row">
-          <label for="nombre" class="form-label">Nombre</label>
+      <div class="col-6 row bg-light border border-1 border-primary pt-3">
+        
+          <label for="nombre" class="form-label p-0 m-0 fw-bold">Nombre</label>
           <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa tu primer nombre y dos apellidos</small>
-          </div>
-        <div class="mb-5 row">
-          <label for="calle" class="form-label">Dirección</label>
+        
+        
+          <label for="calle" class="form-label p-0 m-0 fw-bold">Dirección</label>
           <input type="text" name="calle" id="calle" class="form-control" placeholder="Avenida Bulnes 27" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa el nombre de tu calle y el número de casa y departamento si corresponde</small>
-        </div>
-        <div class="mb-2 row col-4">
-          <label for="comuna" class="form-label">Comuna</label>
+     
+
+    
+          <label for="comuna" class="form-label p-0 m-0 fw-bold">Comuna</label>
           <input type="text" name="comuna" id="comuna" class="form-control" placeholder="Punta Arenas" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa tu comuna</small>
-        </div>
-        <div class="mb-3 col-6">
-          <label for="region" class="form-label">Región</label>
+      
+          <label for="region" class="form-label p-0 m-0 fw-bold">Región</label>
           <input type="text" name="region" id="region" class="form-control" placeholder="Magallanes" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa tu región</small>
-        </div>
-        <div class="mb-3">
-          <label for="recibe" class="form-label">Nombre de quien recibe</label>
+      
+          <label for="recibe" class="form-label p-0 m-0 fw-bold">Nombre de quien recibe</label>
           <input type="text" name="recibe" id="recibe" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa el nombre de quien recibirá la encomienda</small>
-        </div>
-        <div class="mb-3">
-          <label for="correo" class="form-label">Correo de quién recibe</label>
+        
+        
+          <label for="correo" class="form-label p-0 m-0 fw-bold">Correo de quién recibe</label>
           <input type="text" name="correo" id="correo" class="form-control" placeholder="correo@ejemplo.cl" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Ingresa el correo de la persona que recibirá la encomienda</small>
-        </div>
-      </div>
-    </div>
+        
+          <button type="button" class="btn btn-primary w-75 mx-auto my-3">Confirmar compra</button>
+      </div> <!-- col6  -->
+      </div> <!-- row -->
+    </div> <!-- modal body -->
         
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
       </div>
 
-    </div>
-  </div>
-</div>
+    </div> <!-- modal content -->
+  </div> <!-- modal dialog  -->
+</div> <!-- modal -->
 
 <!-- fin modal -->
 
