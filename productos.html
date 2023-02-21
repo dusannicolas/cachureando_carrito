@@ -53,10 +53,39 @@
                 <aside>
                   <h2>Carrito</h2>
                   <div class="row col-12 fw-bold text-nowrap text-start d-flex lh-sm mx-1 pe-4" style="font-size:0.8em;">
-                    <div class="col-1">Cant</div>
+                    <div class="table-responsive">
+                      <table class="table table-striped
+                      table-hover	
+                      table-borderless
+                      table-primary
+                      align-middle">
+                        <thead class="table-light">
+                          <caption>Carrito</caption>
+                          <tr>
+                            <th>Cantidad</th>
+                            <th>Producto</th>
+                            <th>Valor unitario</th>
+                            <th>Subtotal</th>
+                          </tr>
+                          </thead>
+                          <tbody class="table-group-divider">
+                            <tr class="table-primary" >
+                              <td scope="row">C1</td>
+                              <td>PROD1</td>
+                              <td>VAL1</td>
+                              <td>SUB1</td>
+                            </tr>
+                            
+                          </tbody>
+                          <tfoot>
+                            
+                          </tfoot>
+                      </table>
+                    </div>
+                    <!--                     <div class="col-1">Cant</div>
                     <div class="col-5 text-center">Producto</div>
                     <div class="col-3 text-end">Valor unidad</div>
-                    <div class="col-3 text end">Subtotal</div>
+                    <div class="col-3 text end">Subtotal</div> -->
                   </div>
                   <!-- Elementos del carrito -->
                   <ul id="carrito" class="list-group"></ul>

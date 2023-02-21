@@ -162,6 +162,66 @@ function anyadirProductoAlCarrito(evento) {
 /**
  * Dibuja todos los productos guardados en el carrito
  */
+function renderizarCarrito1() {
+
+    // Vaciamos todo el html
+    DOMcarrito.textContent = '';
+    // Quitamos los duplicados
+    const carritoSinDuplicados = [...new Set(carrito)];
+    // Generamos los Nodos a partir de carrito
+    carritoSinDuplicados.forEach((item) => {
+        // Obtenemos el item que necesitamos de la variable base de datos
+        const miItem = baseDeDatos.filter((itemBaseDatos) => {
+            // ¿Coincide las id? Solo puede existir un caso
+            return itemBaseDatos.id === parseInt(item);
+        });
+        // Cuenta el número de veces que se repite el producto
+        const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+            // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+            return itemId === item ? total += 1 : total;
+        }, 0);
+
+        // Creamos el nodo del item del carrito
+        const miNodo = document.createElement('li');
+        miNodo.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'lh-sm', 'mx-2');
+        const totlinea = miItem[0].precio * numeroUnidadesItem;
+        miNodo.innerHTML = `
+            <div class="row col-12 text-nowrap" style="font-size:0.8em;">
+                <div class="col-1">${numeroUnidadesItem}</div>
+                <div class="col-5"><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></div>
+                <div class="col-3 text-right">${divisa}${miItem[0].precio}</div>
+                <div class="col-3 text-right">${divisa} ${totlinea}</div>
+            </div>`;
+        // Boton de borrar
+        const miBoton = document.createElement('span');
+        miBoton.classList.add('badge', 'bg-danger', 'rounded-pill', 'position-absolute', 'top-10', 'start-100', 'translate-middle', 'float-right');
+        miBoton.textContent = 'X';
+        miBoton.style.overflow = '-3rem';
+        miBoton.style.cursor = 'pointer';
+        miBoton.dataset.item = item;
+        miBoton.addEventListener('click', borrarItemCarrito);
+        // Mezclamos nodos
+        miNodo.appendChild(miBoton);
+        DOMcarrito.appendChild(miNodo);
+    });
+
+    // Renderizamos el precio neto en el HTML
+    DOMtotal.textContent = calcularTotal();
+    // Calculamos el IVA
+    DOMiva.textContent = calcularTotal()*0.19
+    // Calculamos el bruto
+    const totalconiva = calcularTotal()*1.19;
+    DOMbruto.textContent = totalconiva
+    // Calcula si corresponde cargo envío
+    if (totalconiva < 100000) {
+        DOMenvio.textContent = parseInt(totalconiva * 0.05);
+    }else{
+        DOMenvio.innerHTML = `0 <i>(¡Conseguiste<br>envío gratuito!)</i>`
+    };
+    // Calcula total a pagar
+    DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
+}
+
 function renderizarCarrito() {
 
     // Vaciamos todo el html
@@ -212,7 +272,7 @@ function renderizarCarrito() {
     // Calculamos el bruto
     const totalconiva = calcularTotal()*1.19;
     DOMbruto.textContent = totalconiva
-    /* Calcula si corresponde cargo envío */
+    // Calcula si corresponde cargo envío
     if (totalconiva < 100000) {
         DOMenvio.textContent = parseInt(totalconiva * 0.05);
     }else{
@@ -300,6 +360,7 @@ DOMabrirPagar.addEventListener('click', boleta);
 // ENVÍO CORREO
 
 function sendMail() {
+    // Objeto a enviar: la propiedad es la que se llama desde emailJS
     var params = {
       nombre: document.getElementById("nombre").value,
       direccion: document.getElementById("calle").value,
@@ -307,14 +368,15 @@ function sendMail() {
       region: document.getElementById("region").value,
       recibe: document.getElementById("recibe").value,
       correo: document.getElementById("correo").value,
-      compra: document.getElementById("comprados").innerHTML,
-      resumen: document.getElementById("resumen").innerHTML
+      compra: '<html>'+document.getElementById("comprados").innerHTML+'</html>',
+      resumen: '<html>'+document.getElementById("resumen").innerHTML+'</html>'
     };
   
     const serviceID = "service_ghnmo4w" //"service_zv8n9o8";
     const templateID = "template_mggbvqq" //"template_klc0rtf";
   
       emailjs.send(serviceID, templateID, params)
+    // Limpia el formulario luego del envío. No se limpia el cntenido del carrito
       .then(res=>{
         document.getElementById("nombre").value = '';
         document.getElementById("calle").value = '';
@@ -322,10 +384,10 @@ function sendMail() {
         document.getElementById("region").value = '';
         document.getElementById("recibe").value = '';
         document.getElementById("correo").value = '';
-          console.log(res);
-          alert("¡Tu mensaje ha sido enviado exitosamente!")
+          console.log(res); // Registro de respuesta API en consola
+          alert("¡Tu mensaje ha sido enviado exitosamente!") // Alerta de envío exitoso
   
       })
-      .catch(err=>console.log(err));
+      .catch(err=>console.log(err)); // Registro de errores en consola
   
   }
