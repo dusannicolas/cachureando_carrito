@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">        
+<html lang="en">
+    <head>        
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
       <link rel="stylesheet" href="css/estilos.css" type="text/css" media="screen">
     <title>Productos</title>
-</html>
-<body>
-  
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function () {
+        emailjs.init("i2vIrJpE0A8p_oG8W");
+      })();
+    </script>
+</head>
+<body> 
         <div class="container">
             <header>
           <div>
@@ -39,29 +47,35 @@
                 <main id="items" class="d-flex overflow-auto row"></main>
               </div>
             </div>  <!-- col8 -->
-            <div class="col-4 border border-3 border-primary">
+            <div id="oculto" class="col-4 border border-3 border-primary" style="display:none;">
                 <!-- Carrito -->
                 <aside>
                   <h2>Carrito</h2>
+                  <div class="row col-12 fw-bold text-nowrap text-start d-flex lh-sm mx-1 pe-4" style="font-size:0.8em;">
+                    <div class="col-1">Cant</div>
+                    <div class="col-5 text-center">Producto</div>
+                    <div class="col-3 text-end">Valor unidad</div>
+                    <div class="col-3 text end">Subtotal</div>
+                  </div>
                   <!-- Elementos del carrito -->
                   <ul id="carrito" class="list-group"></ul>
-                  <hr>
-                  <!-- Precio total -->
-                  <div id="resTotal" class="container">
-                  <span id="pneto" class="text-right">Total neto: $<span id="total"></span></span><br>
-                  <span id="piva" class="text-right">IVA: $<span id="iva"></span></span><br>
-                  <span id="pbruto" class="text-right">Total bruto: $<span id="bruto"></span></span><br>
-                  <span id="penvio" class="text-right">Envío: $<span id="envio"></span></span><br>
-                  <span id="ptotal" class="text-right fw-bold"> Total a pagar: $<span id="apagar"></span></span><br><br>
+                  <!-- Resumen compra y cálculos impuestos y envío -->
+                  <div id="resTotal" class="row col-12 text-nowrap text-start d-flex lh-sm mx-1 pe-4" style="font-size:0.8em;">
+                    <div class="col-9 text-end fw-normal"><span id="pneto">Total neto: $</span></div><div class="col-3"><span id="total"></span></div>
+                    <div class="col-9 text-end fw-normal"><span id="piva">IVA: $</span></div><div class="col-3"><span id="iva"></span></div>
+                    <div class="col-9 text-end fw-normal"><span id="pbruto">Total bruto: $</span></div><div class="col-3"><span id="bruto"></span></div>
+                    <div class="col-9 text-end fw-normal"><span id="penvio">Envío: $</span></div><div class="col-3"><span id="envio"></span></div>
+                    <div class="col-9 text-end fw-bold"><span id="ptotal"> Total a pagar: $</span></div><div class="col-3 fw-bold"><span id="apagar"></span></div>
                   </div>
+                  <br>                  
                   <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
+                  <!-- Button to Open the Modal -->
+                  <button id="abrirPagar" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Pagar</button>
+            </div>
 
                  
 
-<!-- Button to Open the Modal -->
-<button id="abrirPagar" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-  Pagar
-</button>
+
 
 <!-- The Modal -->
 <div class="modal" id="myModal">
@@ -81,42 +95,44 @@
         
       <!-- DIV elementos comprados -->
       <div class="row">
-        <div class="col-6">
+        <div class="col-6" id="boleta">
           <h4>Productos</h4>
-      <div id="comprados"></div>
-      <h4>Resumen de tu compra</h4>
-      <div id="resumen"></div>
-    </div> <!-- col6 -->
+          <!-- Header productos carrito -->
+          <div class="row col-12 fw-bold text-nowrap text-start d-flex lh-sm mx-1 pe-4" style="font-size:0.8em;">
+            <div class="col-1">Cant</div>
+            <div class="col-5">Producto</div>
+            <div class="col-3">Precio unitario</div>
+            <div class="col-3">Subtotal</div>
+          </div>
+          <div id="comprados" style="clear:both;"></div>
+          <div id="resumen"></div>
+      </div> <!-- col6 -->
       <!-- DIV formulario datos -->
       <div class="col-6 row bg-light border border-1 border-primary pt-3">
         
           <label for="nombre" class="form-label p-0 m-0 fw-bold">Nombre</label>
           <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa tu primer nombre y dos apellidos</small>
-        
-        
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa tu primer nombre y dos apellidos</small>
+                
           <label for="calle" class="form-label p-0 m-0 fw-bold">Dirección</label>
           <input type="text" name="calle" id="calle" class="form-control" placeholder="Avenida Bulnes 27" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa el nombre de tu calle y el número de casa y departamento si corresponde</small>
-     
-
-    
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa el nombre de tu calle y el número de casa y departamento si corresponde</small>
+         
           <label for="comuna" class="form-label p-0 m-0 fw-bold">Comuna</label>
           <input type="text" name="comuna" id="comuna" class="form-control" placeholder="Punta Arenas" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa tu comuna</small>
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa tu comuna</small>
       
           <label for="region" class="form-label p-0 m-0 fw-bold">Región</label>
           <input type="text" name="region" id="region" class="form-control" placeholder="Magallanes" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa tu región</small>
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa tu región</small>
       
           <label for="recibe" class="form-label p-0 m-0 fw-bold">Nombre de quien recibe</label>
           <input type="text" name="recibe" id="recibe" class="form-control" placeholder="Pepe Pérez Pérez" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa el nombre de quien recibirá la encomienda</small>
-        
-        
-          <label for="correo" class="form-label p-0 m-0 fw-bold">Correo de quién recibe</label>
-          <input type="text" name="correo" id="correo" class="form-control" placeholder="correo@ejemplo.cl" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Ingresa el correo de la persona que recibirá la encomienda</small>
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa el nombre de quien recibirá la encomienda</small>
+                
+          <label for="correo" class="form-label p-0 m-0 fw-bold">Correo electrónico</label>
+          <input type="mail" name="correo" id="correo" class="form-control" placeholder="correo@ejemplo.cl" aria-describedby="helpId">
+          <small id="helpId" class="text-muted" style="font-size:0.7em;">Ingresa tu correo electrónico</small>
         
           <button type="button" onclick="sendMail()" class="btn btn-primary w-75 mx-auto my-3">Confirmar compra</button>
       </div> <!-- col6  -->

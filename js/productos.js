@@ -107,7 +107,7 @@ function renderizarProductos() {
         miNodo.classList.add('card', 'col-lg-3', 'col-sm-12');
         // Bod
         const miNodoCardBody = document.createElement('div');
-        miNodoCardBody.classList.add('card-body');
+        miNodoCardBody.classList.add('card-body', 'd-flex', 'flex-column');
         // Titulo
         const miNodoTitle = document.createElement('h5');
         miNodoTitle.classList.add('card-title');
@@ -130,8 +130,8 @@ function renderizarProductos() {
         miNodoPrecio.textContent = `${divisa}${info.precio}`;
         // Boton 
         const miNodoBoton = document.createElement('button');
-        miNodoBoton.classList.add('btn', 'btn-primary');
-        miNodoBoton.textContent = '+';
+        miNodoBoton.classList.add('align-self-end', 'btn', 'btn-primary', 'btn-sm');
+        miNodoBoton.textContent = 'Agregar al carrito';
         miNodoBoton.setAttribute('marcador', info.id);
         miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
         // Insertamos
@@ -154,6 +154,8 @@ function anyadirProductoAlCarrito(evento) {
     carrito.push(evento.target.getAttribute('marcador'))
     // Actualizamos el carrito 
     renderizarCarrito();
+    // Mostramos div oculto
+    document.querySelector('#oculto').style.display = 'block';
 
 }
 
@@ -161,6 +163,7 @@ function anyadirProductoAlCarrito(evento) {
  * Dibuja todos los productos guardados en el carrito
  */
 function renderizarCarrito() {
+
     // Vaciamos todo el html
     DOMcarrito.textContent = '';
     // Quitamos los duplicados
@@ -177,22 +180,31 @@ function renderizarCarrito() {
             // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
             return itemId === item ? total += 1 : total;
         }, 0);
+
         // Creamos el nodo del item del carrito
         const miNodo = document.createElement('li');
         miNodo.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'lh-sm', 'mx-2');
         const totlinea = miItem[0].precio * numeroUnidadesItem;
-        miNodo.innerHTML = `<div class="ms-2 me-auto" style="font-size:0.8em;"><div class="fw-bold">(COD:${miItem[0].codigo}) - ${miItem[0].nombre}</div>${divisa}${miItem[0].precio} c/u X ${numeroUnidadesItem} = ${divisa} ${totlinea}</div>`;
+        miNodo.innerHTML = `
+            <div class="row col-12 text-nowrap" style="font-size:0.8em;">
+                <div class="col-1">${numeroUnidadesItem}</div>
+                <div class="col-5"><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></div>
+                <div class="col-3 text-right">${divisa}${miItem[0].precio}</div>
+                <div class="col-3 text-right">${divisa} ${totlinea}</div>
+            </div>`;
         // Boton de borrar
         const miBoton = document.createElement('span');
-        miBoton.classList.add('badge', 'bg-primary', 'rounded-pill');
+        miBoton.classList.add('badge', 'bg-danger', 'rounded-pill', 'position-absolute', 'top-10', 'start-100', 'translate-middle', 'float-right');
         miBoton.textContent = 'X';
-        miBoton.style.marginRight = '0rem';
+        miBoton.style.overflow = '-3rem';
+        miBoton.style.cursor = 'pointer';
         miBoton.dataset.item = item;
         miBoton.addEventListener('click', borrarItemCarrito);
         // Mezclamos nodos
         miNodo.appendChild(miBoton);
         DOMcarrito.appendChild(miNodo);
     });
+
     // Renderizamos el precio neto en el HTML
     DOMtotal.textContent = calcularTotal();
     // Calculamos el IVA
@@ -204,7 +216,7 @@ function renderizarCarrito() {
     if (totalconiva < 100000) {
         DOMenvio.textContent = parseInt(totalconiva * 0.05);
     }else{
-        DOMenvio.textContent = `0 (¡Conseguiste envío gratuito!)`
+        DOMenvio.innerHTML = `0 <i>(¡Conseguiste<br>envío gratuito!)</i>`
     };
     // Calcula total a pagar
     DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
@@ -247,6 +259,8 @@ function vaciarCarrito() {
     carrito = [];
     // Renderizamos los cambios
     renderizarCarrito();
+    // Ocultamos div carrito
+    document.querySelector('#oculto').style.display = 'none';
 }
 
 // Eventos
@@ -257,19 +271,57 @@ renderizarProductos();
 renderizarCarrito();
 
 // BOLETA
-
-//Función que clona div DOMcarrito y Resumen
+// Función que clona div Carrito y Resumen
 function boleta() {
+    // Limpiamos boleta
     document.querySelector('#comprados').textContent = '';
     document.querySelector('#resumen').textContent = '';
+    // Clonamos productos en carrito
     var clon = DOMcarrito;
     var nuevo = clon.cloneNode(true);
     id = document.getElementById("comprados");
-    id.appendChild(nuevo); 
+    id.appendChild(nuevo);
+    // Cambiamos salto de línea entre nombre producto y código por espacio
+    const salto = document.querySelectorAll ('#comprados br');
+    for (let i = 0; i < salto.length; i++) {salto[i].outerHTML = `     `;}
+    // Eliminamos botón quitar producto de boleta
+    const bot = document.querySelectorAll('#comprados .badge');
+    for (let i = 0; i < bot.length; i++) {bot[i].style.display = 'none';}
+    // Clonamos resuen boleta
     var clon2 = document.querySelector('#resTotal');
     var nuevo2 = clon2.cloneNode(true);
     id2 = document.getElementById("resumen");
     id2.appendChild(nuevo2); 
 }
-
+// Lanzamos boleta y formulario al presionar PAGAR
 DOMabrirPagar.addEventListener('click', boleta);
+
+
+// ENVÍO CORREO
+
+function sendMail() {
+    var params = {
+      name: document.getElementById("nombre").value,
+      street: document.getElementById("calle").value,
+      comuna: document.getElementById("comuna").value,
+      region: document.getElementById("region").value,
+      receiver: document.getElementById("recibe").value,
+      email: document.getElementById("correo").value,
+      message: document.getElementById("boleta")
+    };
+  
+    const serviceID = "service_zv8n9o8";
+    const templateID = "template_klc0rtf";
+  
+      emailjs.send(serviceID, templateID, params)
+      .then(res=>{
+          document.getElementById("nombre").value = "";
+          document.getElementById("correo").value = "";
+          document.getElementById("boleta").value = "";
+          console.log(res);
+          alert("¡Tu mensaje ha sido enviado exitosamente!")
+  
+      })
+      .catch(err=>console.log(err));
+  
+  }
