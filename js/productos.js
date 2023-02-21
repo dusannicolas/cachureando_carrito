@@ -162,6 +162,66 @@ function anyadirProductoAlCarrito(evento) {
 /**
  * Dibuja todos los productos guardados en el carrito
  */
+function renderizarCarrito1() {
+
+    // Vaciamos todo el html
+    DOMcarrito.textContent = '';
+    // Quitamos los duplicados
+    const carritoSinDuplicados = [...new Set(carrito)];
+    // Generamos los Nodos a partir de carrito
+    carritoSinDuplicados.forEach((item) => {
+        // Obtenemos el item que necesitamos de la variable base de datos
+        const miItem = baseDeDatos.filter((itemBaseDatos) => {
+            // ¿Coincide las id? Solo puede existir un caso
+            return itemBaseDatos.id === parseInt(item);
+        });
+        // Cuenta el número de veces que se repite el producto
+        const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+            // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+            return itemId === item ? total += 1 : total;
+        }, 0);
+
+        // Creamos el nodo del item del carrito
+        const miNodo = document.createElement('li');
+        miNodo.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'lh-sm', 'mx-2');
+        const totlinea = miItem[0].precio * numeroUnidadesItem;
+        miNodo.innerHTML = `
+            <div class="row col-12 text-nowrap" style="font-size:0.8em;">
+                <div class="col-1">${numeroUnidadesItem}</div>
+                <div class="col-5"><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></div>
+                <div class="col-3 text-right">${divisa}${miItem[0].precio}</div>
+                <div class="col-3 text-right">${divisa} ${totlinea}</div>
+            </div>`;
+        // Boton de borrar
+        const miBoton = document.createElement('span');
+        miBoton.classList.add('badge', 'bg-danger', 'rounded-pill', 'position-absolute', 'top-10', 'start-100', 'translate-middle', 'float-right');
+        miBoton.textContent = 'X';
+        miBoton.style.overflow = '-3rem';
+        miBoton.style.cursor = 'pointer';
+        miBoton.dataset.item = item;
+        miBoton.addEventListener('click', borrarItemCarrito);
+        // Mezclamos nodos
+        miNodo.appendChild(miBoton);
+        DOMcarrito.appendChild(miNodo);
+    });
+
+    // Renderizamos el precio neto en el HTML
+    DOMtotal.textContent = calcularTotal();
+    // Calculamos el IVA
+    DOMiva.textContent = calcularTotal()*0.19
+    // Calculamos el bruto
+    const totalconiva = calcularTotal()*1.19;
+    DOMbruto.textContent = totalconiva
+    // Calcula si corresponde cargo envío
+    if (totalconiva < 100000) {
+        DOMenvio.textContent = parseInt(totalconiva * 0.05);
+    }else{
+        DOMenvio.innerHTML = `0 <i>(¡Conseguiste<br>envío gratuito!)</i>`
+    };
+    // Calcula total a pagar
+    DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
+}
+
 function renderizarCarrito() {
 
     // Vaciamos todo el html
