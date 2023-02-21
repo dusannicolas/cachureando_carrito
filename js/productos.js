@@ -301,23 +301,27 @@ DOMabrirPagar.addEventListener('click', boleta);
 
 function sendMail() {
     var params = {
-      name: document.getElementById("nombre").value,
-      street: document.getElementById("calle").value,
+      nombre: document.getElementById("nombre").value,
+      direccion: document.getElementById("calle").value,
       comuna: document.getElementById("comuna").value,
       region: document.getElementById("region").value,
-      receiver: document.getElementById("recibe").value,
-      email: document.getElementById("correo").value,
-      message: document.getElementById("boleta")
+      recibe: document.getElementById("recibe").value,
+      correo: document.getElementById("correo").value,
+      compra: document.getElementById("comprados").innerHTML,
+      resumen: document.getElementById("resumen").innerHTML
     };
   
-    const serviceID = "service_zv8n9o8";
-    const templateID = "template_klc0rtf";
+    const serviceID = "service_ghnmo4w" //"service_zv8n9o8";
+    const templateID = "template_mggbvqq" //"template_klc0rtf";
   
       emailjs.send(serviceID, templateID, params)
       .then(res=>{
-          document.getElementById("nombre").value = "";
-          document.getElementById("correo").value = "";
-          document.getElementById("boleta").value = "";
+        document.getElementById("nombre").value = '';
+        document.getElementById("calle").value = '';
+        document.getElementById("comuna").value = '';
+        document.getElementById("region").value = '';
+        document.getElementById("recibe").value = '';
+        document.getElementById("correo").value = '';
           console.log(res);
           alert("¡Tu mensaje ha sido enviado exitosamente!")
   
