@@ -162,7 +162,7 @@ function anyadirProductoAlCarrito(evento) {
 /**
  * Dibuja todos los productos guardados en el carrito
  */
-function renderizarCarrito1() {
+/* function renderizarCarrito1() {
 
     // Vaciamos todo el html
     DOMcarrito.textContent = '';
@@ -220,7 +220,7 @@ function renderizarCarrito1() {
     };
     // Calcula total a pagar
     DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
-}
+} */
 
 function renderizarCarrito() {
 
@@ -242,21 +242,27 @@ function renderizarCarrito() {
         }, 0);
 
         // Creamos el nodo del item del carrito
-        const miNodo = document.createElement('li');
-        miNodo.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'lh-sm', 'mx-2');
+        const miNodo = document.createElement('tr');
+        miNodo.classList.add('table-light', 'align-items-center');
         const totlinea = miItem[0].precio * numeroUnidadesItem;
         miNodo.innerHTML = `
-            <div class="row col-12 text-nowrap" style="font-size:0.8em;">
+            <td scope="row">${numeroUnidadesItem}</td>
+            <td><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></td>
+            <td>${divisa}${miItem[0].precio}</td>
+            <td>${divisa} ${totlinea}</td>`;
+
+/*             <div class="row col-12 text-nowrap" style="font-size:0.8em;">
                 <div class="col-1">${numeroUnidadesItem}</div>
                 <div class="col-5"><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></div>
                 <div class="col-3 text-right">${divisa}${miItem[0].precio}</div>
                 <div class="col-3 text-right">${divisa} ${totlinea}</div>
-            </div>`;
+            </div>`; */
         // Boton de borrar
         const miBoton = document.createElement('span');
-        miBoton.classList.add('badge', 'bg-danger', 'rounded-pill', 'position-absolute', 'top-10', 'start-100', 'translate-middle', 'float-right');
+        miBoton.classList.add('badge', 'bg-danger', 'rounded-pill', 'position-relative', 'float');
+        miBoton.style.color = 'white';
+        miBoton.style.background = 'red';
         miBoton.textContent = 'X';
-        miBoton.style.overflow = '-3rem';
         miBoton.style.cursor = 'pointer';
         miBoton.dataset.item = item;
         miBoton.addEventListener('click', borrarItemCarrito);
@@ -266,20 +272,20 @@ function renderizarCarrito() {
     });
 
     // Renderizamos el precio neto en el HTML
-    DOMtotal.textContent = calcularTotal();
+    DOMtotal.textContent = divisa + calcularTotal();
     // Calculamos el IVA
-    DOMiva.textContent = calcularTotal()*0.19
+    DOMiva.textContent = divisa + calcularTotal()*0.19
     // Calculamos el bruto
     const totalconiva = calcularTotal()*1.19;
-    DOMbruto.textContent = totalconiva
+    DOMbruto.textContent = divisa + totalconiva
     // Calcula si corresponde cargo envío
     if (totalconiva < 100000) {
-        DOMenvio.textContent = parseInt(totalconiva * 0.05);
+        DOMenvio.textContent = divisa + parseInt(totalconiva * 0.05);
     }else{
-        DOMenvio.innerHTML = `0 <i>(¡Conseguiste<br>envío gratuito!)</i>`
+        DOMenvio.innerHTML = divisa + `0 (¡Conseguiste envío gratuito!)`
     };
     // Calcula total a pagar
-    DOMapagar.textContent = parseInt(totalconiva) + parseInt(DOMenvio.textContent);
+    DOMapagar.textContent = divisa + parseInt(totalconiva + DOMenvio.textContent);
 }
 
 /**
@@ -337,17 +343,14 @@ function boleta() {
     document.querySelector('#comprados').textContent = '';
     document.querySelector('#resumen').textContent = '';
     // Clonamos productos en carrito
-    var clon = DOMcarrito;
+    var clon = document.querySelector('#carro');
     var nuevo = clon.cloneNode(true);
     id = document.getElementById("comprados");
     id.appendChild(nuevo);
-    // Cambiamos salto de línea entre nombre producto y código por espacio
-    const salto = document.querySelectorAll ('#comprados br');
-    for (let i = 0; i < salto.length; i++) {salto[i].outerHTML = `     `;}
     // Eliminamos botón quitar producto de boleta
     const bot = document.querySelectorAll('#comprados .badge');
     for (let i = 0; i < bot.length; i++) {bot[i].style.display = 'none';}
-    // Clonamos resuen boleta
+    // Clonamos resumen boleta
     var clon2 = document.querySelector('#resTotal');
     var nuevo2 = clon2.cloneNode(true);
     id2 = document.getElementById("resumen");
