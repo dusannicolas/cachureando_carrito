@@ -219,6 +219,11 @@ function anyadirProductoAlCarrito(evento) {
 
 }
 
+/**
+ * Dibuja todos los productos guardados en el carrito
+ */
+
+
 function renderizarCarrito() {
 
     // Vaciamos todo el html
