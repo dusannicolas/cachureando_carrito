@@ -185,10 +185,14 @@ function renderizarProductos() {
         const miNodoBoton = document.createElement('button');
         miNodoBoton.classList.add('btn', 'btn-primary', 'btn-sm');
         miNodoBoton.setAttribute('marcador', info.id);
+      //  const tr = document.getElementById(info.codigo);
         if (info.stock <=0) {
             miNodoBoton.textContent = `Sin stock`;
             miNodoBoton.classList.add('btn', 'btn-dark', 'btn-sm');
             miNodoBoton.style.cursor = 'no-drop';
+       // }else if(info.stock <= parseInt(tr.value)){
+            
+      //      miNodoBoton.textContent = `YA ESTÁ GIL!`;
         }else{
         miNodoBoton.textContent = 'Agregar al carrito';
         miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
@@ -210,13 +214,25 @@ function renderizarProductos() {
  * Evento para añadir un producto al carrito de la compra
  */
 function anyadirProductoAlCarrito(evento) {
+
+   /* const id = evento.target.dataset.item; 
+    const index = carrito.indexOf(id);
+    if(index >= 0) {
+        alert('El producto ya se encuentra en el carrito');
+    } else {*/
     // Anyadimos el Nodo a nuestro carrito
     carrito.push(evento.target.getAttribute('marcador'))
+    // Cambiar e inhabilitar botón   miNodoBoton.textContent = `Producto añadido`;
+    //alert('Producto añadido');
     // Actualizamos el carrito 
     renderizarCarrito();
     // Mostramos div oculto
     document.querySelector('#oculto').style.display = 'block';
-
+    //}
+    evento.target.removeEventListener(evento.type, anyadirProductoAlCarrito);
+    evento.target.textContent = `Agregado!`;
+    evento.target.classList.add('btn-dark');   
+    evento.target.style.cursor = 'no-drop';
 }
 
 /**
@@ -237,18 +253,39 @@ function renderizarCarrito() {
             // ¿Coincide las id? Solo puede existir un caso
             return itemBaseDatos.id === parseInt(item);
         });
-        // Cuenta el número de veces que se repite el producto
+        // Cuenta el número de veces que se repite el producto, no puede ser mayor que el stock
         const numeroUnidadesItem = carrito.reduce((total, itemId) => {
-            // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
-            return itemId === item ? total += 1 : total;
+            // ¿Coincide las id? Incremento el contador, en caso contrario lo mantengo
+            if (itemId === item) {
+                if (total + 1 > miItem[0].stock) { // Si el total en el arreglo es mayor al stock, envía alerta
+                    alert('No puedes agregar más unidades de este producto');
+                    return total;
+                } else {
+                return total + 1;
+                }
+            } else {
+                return total;
+            }
         }, 0);
+
+/*         const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+            // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+           //ORIGINAL -> return itemId === item ? total += 1 : total;
+            // VARIACION 1 SIGUE SUMANDO ITEM AL ARRAY CARRITO -> return itemId === item ? Math.min(total + 1, miItem[0].stock) : total;
+        }, 0); */
 
         // Botón de aumentar
         const botonMas = document.createElement('i');
         botonMas.classList.add('bi', 'bi-plus-circle');
         botonMas.style.cursor = 'pointer';
         botonMas.dataset.item = item;
-        botonMas.addEventListener('click', aumentaCantidad);
+        if (numeroUnidadesItem < miItem[0].stock) {
+            botonMas.style.display = ' ';
+            botonMas.addEventListener('click', aumentaCantidad);
+        } else {
+            botonMas.style.color = '#BBBBBB';
+            botonMas.style.cursor = 'default';
+        }
         // Botón de disminuir
         const botonMenos = document.createElement('i');
         botonMenos.classList.add('bi', 'bi-dash-circle');
@@ -261,7 +298,7 @@ function renderizarCarrito() {
         miNodo.classList.add('table-light', 'align-items-center');
         const totlinea = miItem[0].precio * numeroUnidadesItem;
         miNodo.innerHTML = `
-            <td scope="row">${numeroUnidadesItem}</td>
+            <td scope="row" id="${miItem[0].codigo}">${numeroUnidadesItem}</td>
             <td><strong>${miItem[0].nombre}</strong><br><span style="font-size:0.7em;">(COD:${miItem[0].codigo})</span></td>
             <td>${divisa}${miItem[0].precio}</td>
             <td>${divisa} ${totlinea}</td>`;
@@ -305,12 +342,13 @@ function renderizarCarrito() {
  */
 function borrarItemCarrito(evento) {
     // Obtenemos el producto ID que hay en el boton pulsado
-    
-    const id = evento.target.dataset.item;
+        const id = evento.target.dataset.item;
     // Borramos todos los productos
     carrito = carrito.filter((carritoId) => {
         return carritoId !== id;
     });
+    DOMitems.textContent = ' ';
+    renderizarProductos(id);
     // volvemos a renderizar
     renderizarCarrito();
 }
@@ -402,7 +440,7 @@ function boleta() {
 // Lanzamos boleta y formulario al presionar PAGAR
 DOMabrirPagar.addEventListener('click', boleta);
 
-/* FUNCIÓN AL TERMINAR CARRO: ENVÍA CORREO Y CORRIGE STOCK */
+/* FUNCIÓN AL TERMINAR CARRO: ENVÍA CORREO Y CORRIGE STOCK 
 function finalizaCompra() {
     // Recorrer arreglo carrito
     return carrito.reduce((total, item) => {
@@ -416,7 +454,7 @@ function finalizaCompra() {
     // Obtener cantidad de cada producto id
     // Actualizar cantidad en arreglo baseDeDatos
     sendMail(); // Envío correo
-}
+}*/
 
 
 // ENVÍO CORREO
