@@ -131,6 +131,7 @@ const DOMenvio = document.querySelector('#envio');
 const DOMapagar = document.querySelector('#apagar')
 const DOMbotonVaciar = document.querySelector('#boton-vaciar');
 const DOMabrirPagar = document.querySelector('#abrirPagar');
+const DOMboleta = document.querySelector('#boleta')
 
 // Funciones
 
@@ -181,22 +182,24 @@ function renderizarProductos() {
         const miNodoPrecio = document.createElement('p');
         miNodoPrecio.classList.add('card-text');
         miNodoPrecio.textContent = `${divisa}${info.precio}`;
-        // Boton 
+        // Boton Agregar al carrito
         const miNodoBoton = document.createElement('button');
         miNodoBoton.classList.add('btn', 'btn-primary', 'btn-sm');
         miNodoBoton.setAttribute('marcador', info.id);
-      //  const tr = document.getElementById(info.codigo);
-        if (info.stock <=0) {
+        const tr = document.getElementById(info.codigo);
+        let incl = carrito.includes(info.id);   
+        if (incl === true) {
+            miNodoBoton.textContent = `Ya está en el carro`;
+            miNodoBoton.classList.add('btn', 'btn-dark', 'btn-sm');
+            miNodoBoton.style.cursor = 'no-drop';
+        }else {if (info.stock <=0) {
             miNodoBoton.textContent = `Sin stock`;
             miNodoBoton.classList.add('btn', 'btn-dark', 'btn-sm');
             miNodoBoton.style.cursor = 'no-drop';
-       // }else if(info.stock <= parseInt(tr.value)){
-            
-      //      miNodoBoton.textContent = `YA ESTÁ GIL!`;
         }else{
         miNodoBoton.textContent = 'Agregar al carrito';
         miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
-        }
+        }}
         // Insertamos
         miNodoCardBody.appendChild(miNodoImagen);
         miNodoCardBody.appendChild(miNodoTitle);
@@ -213,32 +216,42 @@ function renderizarProductos() {
 /**
  * Evento para añadir un producto al carrito de la compra
  */
-function anyadirProductoAlCarrito(evento) {
 
-   /* const id = evento.target.dataset.item; 
-    const index = carrito.indexOf(id);
-    if(index >= 0) {
-        alert('El producto ya se encuentra en el carrito');
-    } else {*/
-    // Anyadimos el Nodo a nuestro carrito
-    carrito.push(evento.target.getAttribute('marcador'))
-    // Cambiar e inhabilitar botón   miNodoBoton.textContent = `Producto añadido`;
-    //alert('Producto añadido');
-    // Actualizamos el carrito 
-    renderizarCarrito();
-    // Mostramos div oculto
-    document.querySelector('#oculto').style.display = 'block';
-    //}
-    evento.target.removeEventListener(evento.type, anyadirProductoAlCarrito);
-    evento.target.textContent = `Agregado!`;
-    evento.target.classList.add('btn-dark');   
-    evento.target.style.cursor = 'no-drop';
+function anyadirProductoAlCarrito(evento) {
+    const id = evento.target.getAttribute('marcador'); 
+    let incl = carrito.includes(id);
+    
+    if(incl === true) {
+        document.querySelector('#oculto').style.display = 'block';
+        evento.target.removeEventListener(evento.type, anyadirProductoAlCarrito);
+        evento.target.textContent = `Ya agregado!`;
+        alert(`El producto ya se encuentra en el carrito`);
+        evento.target.classList.add('btn-dark');   
+        evento.target.style.cursor = 'no-drop';
+        renderizarCarrito();
+        //producto.stock -= 1;
+
+    } else if(incl === false) {
+        // Anyadimos el Nodo a nuestro carrito
+        carrito.push(evento.target.getAttribute('marcador'))
+        // Cambiar e inhabilitar botón   miNodoBoton.textContent = `Producto añadido`;
+        //alert('Producto añadido');
+        // Actualizamos el carrito 
+        renderizarCarrito();
+        // Mostramos div oculto
+        document.querySelector('#oculto').style.display = 'block';
+        //}
+        evento.target.removeEventListener(evento.type, anyadirProductoAlCarrito);
+        evento.target.textContent = `Agregado!`;
+        evento.target.classList.add('btn-dark');   
+        evento.target.style.cursor = 'no-drop';
+    }
 }
+
 
 /**
  * Dibuja todos los productos guardados en el carrito
  */
-
 
 function renderizarCarrito() {
 
@@ -258,7 +271,7 @@ function renderizarCarrito() {
             // ¿Coincide las id? Incremento el contador, en caso contrario lo mantengo
             if (itemId === item) {
                 if (total + 1 > miItem[0].stock) { // Si el total en el arreglo es mayor al stock, envía alerta
-                    alert('No puedes agregar más unidades de este producto');
+                   // alert(`El producto ${miItem[0].nombre} ya fue agregado al carro. Puedes modificar la cantidad con los botones + y -.`);
                     return total;
                 } else {
                 return total + 1;
@@ -282,6 +295,7 @@ function renderizarCarrito() {
         if (numeroUnidadesItem < miItem[0].stock) {
             botonMas.style.display = ' ';
             botonMas.addEventListener('click', aumentaCantidad);
+           // botonMas.addEventListener('click', disminuirStock);
         } else {
             botonMas.style.color = '#BBBBBB';
             botonMas.style.cursor = 'default';
@@ -292,6 +306,8 @@ function renderizarCarrito() {
         botonMenos.style.cursor = 'pointer';
         botonMenos.dataset.item = item;
         botonMenos.addEventListener('click', disminuyeCantidad);
+        //botonMenos.addEventListener('click', disminuirStock);
+
 
         // Creamos el nodo del item del carrito
         const miNodo = document.createElement('tr');
@@ -406,9 +422,6 @@ function vaciarCarrito() {
     document.querySelector('#oculto').style.display = 'none';
 }
 
-// VERIFICAR STOCK
-// ACTUALIZAR STOCK AL COMPRAR
-// NOTIFICAR POR CORREO
 
 // Eventos
 DOMbotonVaciar.addEventListener('click', vaciarCarrito);
@@ -419,6 +432,16 @@ renderizarCarrito();
 
 // BOLETA
 // Función que clona div Carrito y Resumen
+
+function boletaNueva(){
+    carrito.forEach((item) => {
+        const miItemBoleta = baseDeDatos.filter((itemBaseDatos) => {
+            return itemBaseDatos.id === parseInt(item);
+        });
+        const miNodoBoleta = document.createElement('tr');
+
+    })
+}
 function boleta() {
     // Limpiamos boleta
     document.querySelector('#comprados').textContent = '';
